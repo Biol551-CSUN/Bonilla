@@ -1,0 +1,89 @@
+---
+title: "Week 6 Lab"
+author: "Brandon Bonilla"
+date: "3/3/2022"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    theme: darkly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# *Intro Beautiful Markdown*
+
+* **library**(tidyverse)
+* **library**(here)
+* **library**(palmerpenguins)
+* **library**(kableExtra)
+* **library**(ymlthis)
+```{r, echo=FALSE}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(kableExtra)
+library(ymlthis)
+```
+
+# *Data Set*
+ 
+```{r,echo=FALSE}
+glimpse(penguins)
+```
+# *Data Analysis*
+* Table and Plot used to analyze Palmer Penguin dataset
+```{r,echo=FALSE}
+Bills<-penguins%>% #data set
+  drop_na()%>%
+  rename("Species"= species, #name data
+         "Sex" = sex,
+         "Island" = island)
+view(Bills)
+
+```
+# *Tables*
+```{r, fig.align='center',echo=FALSE}
+Bills%>%
+  group_by(Species, Island, Sex)%>% #group and set table values
+  summarise("AVG Bill Length (mm)" = mean(bill_length_mm),
+            "AVG Bill Depth (mm)" = mean(bill_depth_mm),
+            "AVG Flipper Length (mm)" = mean(flipper_length_mm),
+            "Body Mass (g)"= mean(body_mass_g))%>%
+  mutate_if(is.numeric,round, digits = 2)%>%
+  kbl()%>% # make the table
+  kable_material_dark()%>% # set theme
+  pack_rows("Adelie",1,6)%>% # speparate data
+  pack_rows("Chinstrap",7,8)%>%
+  pack_rows("Gentoo",9,10)
+
+  
+
+
+
+
+
+```
+
+
+# *Plot*  
+```{r, fig.align='center',echo=FALSE}
+Bills%>%
+  ggplot(aes(x = Sex, # set the plot
+             y = bill_depth_mm,
+             fill = Species))+
+  geom_boxplot(aes(fill = Species))+
+  facet_wrap(~Species)+ # wrap species as the box plots
+  labs(title = "Is There Sexual Dimorphism in Penguins?",
+             x = "Sex",
+             y = "Bill Depth (mm)",
+             fill = "Species")+
+  theme(plot.title = element_text(hjust = 0.5), # clean the plot
+        panel.border = element_rect(fill = NA,
+                                    color = "black"))
+  
+  
+```
+

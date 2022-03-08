@@ -1,0 +1,46 @@
+---
+title: "Week6P2"
+author: "Brandon"
+date: "3/3/2022"
+output: html_document
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = "../Output/", warning = FALSE, message = FALSE)
+```
+
+# Intro
+
+Today we are going to work with the penguin data to learn *RMarkdown*.
+
+#Load Libraries
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(beyonce)
+library(kableExtra)
+library(ymlthis)
+```
+
+# Data
+
+```{r}
+glimpse(penguins)
+```
+
+# Plot 
+```{r penguin1, fig.width=3, fig.height=4, fig.asp=1.2, fig.align="center", fig.cap= "These are my Penguins", echo=FALSE}
+penguins %>%
+  ggplot(aes(x = bill_length_mm,
+           y = bill_depth_mm,
+           color = species))+
+  geom_point(aes(fill=species))+
+  geom_smooth(method = "lm")+
+  labs(x = "Bill Length (mm)",
+       y = "Bill Depth (mm)")+
+  scale_fill_manual(values = beyonce_palette(39))
+
+```
+
