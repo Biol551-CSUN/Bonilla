@@ -1,0 +1,71 @@
+---
+title: "Week 7 Lab"
+author: "Brandon"
+date: "3/8/2022"
+output:
+  html_document:
+    TOC: TRUE
+    TOC_FLOAT: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = "../Output/")
+```
+
+## Intro
+Making my first map in R Markdown.
+```{r}
+library(tidyverse)
+library(here)
+library(mapproj)
+library(maps)
+library(mapdata)
+```
+
+## Dataset
+
+```{r pressure, echo=FALSE}
+stations <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-01/stations.csv')
+View(stations)
+```
+## Data Analysis
+```{r}
+California<-map_data("state", region = "california") # Creating map for California
+
+Fuel<-stations%>%
+  filter(STATE == "CA", # filtering desired data and selecting desired columns
+         FUEL_TYPE_CODE == "LPG")%>%
+  select(LONGITUDE,
+         LATITUDE,
+         FUEL_TYPE_CODE,
+         CITY)
+View(Fuel)
+```
+## Mapping
+```{r California1}
+ggplot()+
+  geom_polygon(data = California, # creating polygon map for California
+               aes(x = long,
+                   y = lat,
+                   group = group),
+               fill = "yellow", # Laker colors
+               color = "purple")+
+  geom_point(data = Fuel, # Showing the points on the plot for data
+             aes(x = LONGITUDE,
+                 y = LATITUDE,
+                 color = FUEL_TYPE_CODE))+
+  coord_fixed()+ #fixing the coordinates
+  labs(title = "Propane Fuel and Propane Accessories Located in California", # Adding apprppriate titles for the plot
+       x = "Longitude",
+       y = "Latitude",
+       color = "Fuel Type Code",
+       caption = "From Tidy Tuesday Week 6 Fuel Stations")+
+  theme(plot.title = element_text(hjust = 0.5), # Adding themes to look nice
+        panel.border = element_rect(fill = NA,
+                                    color = "black"))+
+  scale_color_manual(values = "purple") # Still laker colors 
+  
+
+
+```
+

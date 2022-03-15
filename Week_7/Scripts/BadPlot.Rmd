@@ -1,0 +1,81 @@
+---
+title: "Bad Plot"
+author: "Brandon"
+date: "3/11/2022"
+output: 
+  html_document:
+    TOC: TRUE
+    TOC_FLOAT: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = "../Output/")
+```
+
+## Intro
+
+```{r}
+library(tidyverse)
+library(here)
+library(mapproj)
+library(maps)
+library(mapdata)
+library(ggdogs)
+```
+
+## Dataset
+
+```{r, echo=FALSE}
+stations <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-01/stations.csv')
+View(stations)
+```
+## Data Analysis
+```{r}
+California<-map_data("state", region = "california") #Map of California
+
+Fuel<-stations%>% #Naming data and filtering for specifically CA and CNG fuel
+  filter(STATE == "CA",
+         FUEL_TYPE_CODE == "CNG")%>% 
+  select(LONGITUDE, # Selecting columns
+         LATITUDE,
+         FUEL_TYPE_CODE)
+View(Fuel)
+```
+## Mapping
+```{r BAD1}
+ggplot()+
+  geom_polygon(data = California, #making polygon plot
+               aes(x = long,
+                   y = lat),
+               fill = "white",
+               color = "black")+ # Dog friendly colors
+  geom_point(data = Fuel,
+             aes(x = LONGITUDE,
+                 y = LATITUDE,
+                 color = FUEL_TYPE_CODE))+
+  geom_dog(data = Fuel, # Adding the Pugs
+           aes(x = LONGITUDE,
+               y = LATITUDE,
+               color = FUEL_TYPE_CODE,
+               dog = "pug", size = 1000))+
+  coord_fixed()+ # fixing coordinates
+  labs(title = "Pug Friendly Fuel Stations in California",
+       x = "X-Axis", #appropriate labeling
+       y = "Y-Axis",
+       color = "Legend",
+       caption = "Caption")+
+  theme(plot.title = element_text(hjust = 3.0), # proper themes to easily see the plot
+        panel.border = element_rect(fill = NA,
+                                    color = "white"))+
+  theme_void()+
+  theme_dark()+
+  theme_minimal()+
+  scale_color_manual(values = "black") 
+```
+
+
+
+
+
+
+
