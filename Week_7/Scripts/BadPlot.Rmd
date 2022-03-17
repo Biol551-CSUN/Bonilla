@@ -14,6 +14,18 @@ knitr::opts_chunk$set(echo = TRUE, fig.path = "../Output/")
 
 ## Intro
 
+Features: 
+
+** This is a plot showing the location of CNG fuels in California using a map plot. 
+** Filter and select were used to extract the specific data I wanted.
+** Geom polygon to add the map plot, colors made to fit the dog theme 
+** Geom point to add the points
+** Geom dog to add the dogs, size was made to be larger to cover points 
+** Coord fixed to fix the coordinates 
+** Titles purposely made terrible 
+** Themes purposely made terrible, panel color white
+
+
 ```{r}
 library(tidyverse)
 library(here)
