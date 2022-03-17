@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.path = "../Output/")
+knitr::opts_chunk$set(echo = TRUE, fig.path = "../Output/", fig.path = "../Data/")
 ```
 
 ## Intro
@@ -37,7 +37,7 @@ library(ggdogs)
 
 ## Dataset
 
-```{r, echo=FALSE}
+```{r data1}
 stations <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-01/stations.csv')
 View(stations)
 ```
