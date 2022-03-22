@@ -1,0 +1,76 @@
+---
+title: "Week 8 Lab P2"
+author: "Brandon"
+date: "3/20/2022"
+output: 
+  html_document: 
+    TOC: TRUE
+    TOC_FLOAT: TRUE 
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', warning = FALSE, message = FALSE)
+```
+
+## Intro
+
+This week we learned how to make functions for plots.
+```{r}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(PNWColors)
+```
+
+## Data Set 
+
+```{r}
+glimpse(penguins)
+view(penguins)
+```
+## Data Filter
+```{r}
+penguin<-penguins%>%
+  drop_na()%>%
+  filter(island == "Dream") # Filtering penguins for being exclusively of this island
+```
+
+
+
+## Data Analysis and Plot
+```{r function}
+flipper_length_in<-function(flipper_length_mm){
+  penguins<-(flipper_length_mm*0.0393701)
+  return(penguins)
+  }# function converting millimeters to inches
+flipper_length_in(360)
+
+newplot<-function(data=penguin, x, y, lines=TRUE){ 
+pal<-pnw_palette("Winter",3, type = "discrete") # color palette 
+
+if(lines==TRUE){ # if the lines are true then the plot will be a box plot
+ggplot(data, aes(x = {{x}}, y = {{y}} , color = sex))+
+  geom_point()+
+    geom_boxplot()+
+    scale_color_manual("Sex", values=pal)+ 
+    theme_bw()+
+    labs(title = "Flipper Length Comparisson of Sexes in Dream Island",
+         x = "Sex",
+         y = "Flipper Length (mm)")
+}
+else{ # if the lines are not true the plot will be a geom plot
+ggplot(data, aes(x = {{x}}, y = {{y}} , color = island))+
+    geom_point()+
+    scale_color_manual("Sex", values=pal)+
+    theme_bw()+
+    labs(title = "Flipper Length Comparisson of Sexes in Dream Island",
+         x = "Sex",
+         y = "Flipper Length (mm)")
+}
+}
+
+# Boxplot or Geom plots of male and female flipper lengths of Dream penguins
+# Second function added to convert flipper length into inches 
+```
+
