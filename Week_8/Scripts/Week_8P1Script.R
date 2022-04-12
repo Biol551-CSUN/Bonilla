@@ -31,6 +31,9 @@ p2<-penguins%>%
              y=body_mass_g,
              color=species))+
   geom_point()
+p1+p2 +
+  plot_layout(guides = 'collect')+
+  plot_annotation(tag_levels = 'A')
 
 p1/p2+
   plot_layout(guides = 'collect')+
@@ -41,7 +44,8 @@ view(mtcars)
 ggplot(mtcars, aes(x = wt, 
                    y = mpg, 
                    label = rownames(mtcars))) +
-  geom_text() +
+  geom_text() + # create text label
+  geom_label_repel()+ # repel them
   geom_point(color = 'red')
 ########################
 # Animations
@@ -52,9 +56,9 @@ penguins %>%
              color = species)) +
   geom_point()+
   transition_states(
-    year,
-    transition_length = 2,
-    state_length = 1)+
+    year, # what we are animating by
+    transition_length = 2, # length of transition
+    state_length = 1)+ # length between transition
   ease_aes("sine-in-out")+
   ggtitle('Year: {closest_state}')+
   anim_save(here("Week_8","Output", "mypenguinif.gif"))
