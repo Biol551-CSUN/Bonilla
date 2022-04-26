@@ -1,0 +1,59 @@
+---
+title: "Week12Lab"
+author: "Brandon"
+date: "4/25/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.path = "../Output/")
+```
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+## Load Data
+
+```{r}
+intertidiald <-read_csv(here("Week_12", "Data","intertidaldata.csv"))
+latitude <-read_csv(here("Week_12", "Data", "intertidaldata_latitude.csv"))
+
+view(intertidiald)
+view(latitude)
+```
+
+## Data Analysis
+```{r}
+clean_intertidal <- intertidiald %>% 
+  filter(!is.na(Site)) %>% 
+  group_by(Quadrat) %>% 
+  summarise(Mussels, Site, Quadrat) %>%
+  mutate(Quadrat = str_replace(Quadrat, pattern = "\\.", replacement = ""), 
+         Quadrat = str_replace(Quadrat, pattern = "[0-9]", replacement = ""), 
+         Quadrat = factor(Quadrat, levels = c('Low', 'Mid', 'High'))) %>% 
+  filter(Mussels>3, !is.na(Quadrat))
+
+view(clean_intertidal)
+
+```
+
+## Plotting
+
+```{r Mussels}
+clean_intertidal %>% 
+  ggplot(aes(x = Quadrat, y = Mussels, 
+             fill = Site)) +
+  geom_col() +
+  labs(title = "Intertidal Mussel Population by Site", 
+       x = "Tide Height",
+       y = "Mussel Population")+
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.border = element_rect(fill = NA,
+                                    color = "black"))
+```
+
